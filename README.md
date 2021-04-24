@@ -53,58 +53,90 @@ Criar uma API REST utilizando Spring + Hibernate
 6. Agora iremos criar um pacote chamado controller com uma classe CadastroController, ela será responsável por receber a requisição e enviar as requisições HTTPS.
 ![image](https://user-images.githubusercontent.com/46768410/115972135-07e7c400-a523-11eb-93a7-eaceaaf78ab0.png)
   * Nela utilizaremos as anotações @RestController (Aqui informamos que sera uma APIRESTful), @RequestMapping(a URI para qual será feito as requisições) e o        @RequiredArgsConstructor(É a anotação do Lombok para adicionar todos os contrutores que precise)
-  * 2 Endpoints do tipo POST, são com eles que iremos criar nossos respectivos usuários e endereços
+  * Dentro dos métodos teremos as anotações @RequestBody(Informando qual o tipo de JSON que receberemos), @PathVariable (Aqui dizemos que receberemos um CPF na URL), @Valid(Dentro da classe usuários adicionamos uma anotação @NotEmpty para essa anotação funcionar corretamente precisamos colocar o @Valid dentro do método no controller que recebe ela)
+  * 2 Endpoints do tipo POST @PostMapping, são com eles que iremos criar nossos respectivos usuários e endereços
   * 1 Endpoint do tipo GET, ele irá retornar um usuário e seus respectivos endereçõs.
 
-<!-- GETTING STARTED -->
-## Instalação
+7. Controller criado iremos para onde ficará toda regra de negócios da aplicação, o Service: 
+   ![image](https://user-images.githubusercontent.com/46768410/115972599-bbea4e80-a525-11eb-9db1-754662115a1f.png)
+    *Aqui temos o método saveUsuario
+      
+     ```JAVA  
+      Optional<Usuario> byId = usuarioRepository.findById(usuario.getCpf());
+      List<Usuario> byEmail = usuarioRepository.findByEmail(usuario.getEmail());
+     ```
+     *Ele inicialmente busca no banco se existe algum cpf ou email cadastrado igual ao que foi passado, caso já existe ele retorna para o usuário um status 400 e que o CPF ou E-mail já foi cadastrado.
+     
+     *saveEndereco ele faz uma valicação utilizando o validateCep(endereco), esse método validateCep faz uma requisição do tipo GET para a API viaCep e verifica se o CEP que foi passado esta correto: 
+      ``` JAVA
+          public ViaCep validateCep(EnderecoView endereco) {
+            try {
+                return this.viaCEPClient.buscaEndereco(endereco.getCEP());
+            } catch (BadRequestException badRequestException) {
+                throw new BadRequestException("CEP inválido");
+            }
+        }
+      ```
+      *Lá na nossa Application eu adicionei a anotação @EnableFeignClients, foi por causa dessa requisição com a API ViaCEP. Para conseguirmos utilizar ela de forma correta precisáremos criar duas classes, a uma interface em que será feito as configurações e feito a requisição e um model de resposta.
+      #### Classe ViaCEP:
+      ![image](https://user-images.githubusercontent.com/46768410/115972882-7c246680-a527-11eb-9905-cecf26c31c0e.png)
 
-### Pré requisitos
+      #### Interface ViaCEP:
+      ![image](https://user-images.githubusercontent.com/46768410/115972884-87779200-a527-11eb-86e7-c4cc8639e25d.png)
+        *Aqui fazemos o modelo de como será feito a requisição para a API, e só precismos chamá-la no nosso Service
+        
+     *Voltando a nossa classe service, teremos apenas mais dois métodos, que são responsáveis para tratar o retorno quando buscarmos a lista de endereços de um usuário 
+     ![image](https://user-images.githubusercontent.com/46768410/115972964-108ec900-a528-11eb-8c42-20f280f8c973.png)
 
-* Insomnia/Postman ( Para testar os endpoints ) 
+8. Criar as repository, são elas que persistiram os objetos no banco e buscaram quando necessário. 
+    #### Usuário Repository
+    ![image](https://user-images.githubusercontent.com/46768410/115972986-3916c300-a528-11eb-87d2-141afbc388a0.png)
+      *Adicionamoes o extends JpaRepository para conseguirmos nos comunicar com o banco utilizando o JPA
+      
+    #### Endereço Repository
+    ![image](https://user-images.githubusercontent.com/46768410/115972992-42a02b00-a528-11eb-9a3d-f136fe7cdee2.png) 
+    
+9. Por último adicionaremos dentro da nossa aplicação a lib MapStruct ela serve para mapearmos uma classe para outra, o ideal dentro de um projeto é não retornar a classe com anotação Entity, então criaremos mais duas classes, EnderecoView e UserView;
+    ![image](https://user-images.githubusercontent.com/46768410/115973675-46827c00-a52d-11eb-9fa3-03555624ab73.png)
+    ![image](https://user-images.githubusercontent.com/46768410/115973677-4a160300-a52d-11eb-9c66-64d1c7700668.png)
 
-  
-* Alguma IDE que rode Java  como Eclipse, Intellij... 
 
-* Mysql
-  
-* Docker  
+### Execução
+ * Com todas as classes devidamente criadas novamente executaremos a aplicação 
 
-
-### Instalação
-
-1. Pegue o link do repositório https://github.com/Raeski/crud-place.git
-2. Clone o repo
-   ```sh
-   git clone https://github.com/Raeski/crud-place.git
-   ```
-3. Abra em sua IDE de prefêrencia
-
-4. No terminal execute docker-compose up
-
-5. Na IDE execute o arquivo GamesApplication
-
-6. No insomnia teste os endpoins no localhost:8080
+1. No insomnia teste os endpoins no localhost:8080
 
 ```
-    Exemplo de JSON :
+    Exemplo de JSON para criação de Usuário:
     {
-    "name": "Fifa 21",
-    "producer": "EA",
-    "releaseYear": 2020
+      "nome": "Gustavo",
+      "email": "teste@gmail.com",
+      "cpf": 1111111111,
+      "dtNascimento": "09/12/1999"
     }
+    
+    Exemplo de JSON para criação de Endereço:
+   {
+    "logradouro": "Rua maria dirce Ribeiro",
+    "numero": 2911,
+    "complemento": "apto 201",
+    "bairro": "Santa monica",
+    "cidade": "Uberlandia",
+    "estado": "Minas gerais",
+    "cep": "38408194",
+    "cpfUsuario":{
+      "cpf" :  1111111111
+    }
+  }
  ```
 
+
    ```JS
-   POST /games - para criar um jogo
+   POST /cadastro/usuario - para cadastrar um usúario
    
-   GET /games - Retorna uma lista com todos os jogos
+   POST /cadastro/endereco - Cadastrar um endereço
    
-   GET /games/{id} - Retorna o Game que foi passado o id
-   
-   DELETE /games/{id} - Deleta o Game que foi passado o id
-   
-   PUT /games - Atualiza o Game, precisa passar o id do game dentro do JSON
+   GET /cadastro/{cpf} - Retornar uma lista com os endereços do usúario
    ```
 
 <!-- CONTACT -->
@@ -114,4 +146,6 @@ Criar uma API REST utilizando Spring + Hibernate
 <p>Feito por <b>Gustavo Raeski</b>  :octocat: | - gustavoraeski@outlook.com
 
 <a href="https://www.linkedin.com/in/gustavo-raeski/">Entre em contato</a></p>
+<a href="https://github.com/Raeski/OrangeTalent">Link do repositório para conferir baixar a API</a></p>
+
 
