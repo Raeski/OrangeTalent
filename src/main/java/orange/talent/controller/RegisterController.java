@@ -1,9 +1,9 @@
 package orange.talent.controller;
 
 import orange.talent.model.Adress;
-import orange.talent.model.Usuario;
+import orange.talent.model.User;
 import orange.talent.model.view.ListAdressView;
-import orange.talent.service.CadastroService;
+import orange.talent.service.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,23 +13,23 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("cadastro")
-public class CadastroController {
+public class RegisterController {
 
     @Autowired
-    private CadastroService cadastroService;
+    private RegisterService registerService;
 
     @PostMapping("/usuario")
-    public ResponseEntity<Usuario> saveUsuario(@RequestBody @Valid Usuario usuario) {
-        return new ResponseEntity(cadastroService.saveUsuario(usuario), HttpStatus.CREATED);
+    public ResponseEntity<User> saveUsuario(@RequestBody @Valid User user) {
+        return new ResponseEntity(registerService.saveUsuario(user), HttpStatus.CREATED);
     }
 
     @PostMapping("/endereco")
     public ResponseEntity<Adress> saveEndereco(@RequestBody Adress adress) {
-        return new ResponseEntity(cadastroService.saveEndereco(adress), HttpStatus.CREATED);
+        return new ResponseEntity(registerService.saveEndereco(adress), HttpStatus.CREATED);
     }
 
     @GetMapping(path= "/{cpfUsuario}")
     public ResponseEntity<ListAdressView> list(@PathVariable("cpfUsuario") long cpf) {
-        return ResponseEntity.ok(cadastroService.listAll(cpf));
+        return ResponseEntity.ok(registerService.listAll(cpf));
     }
 }

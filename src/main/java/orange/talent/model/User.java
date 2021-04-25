@@ -8,7 +8,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "tb_usuario")
-public class Usuario {
+public class User {
 
     @Id
     @Column(unique = true)
@@ -23,10 +23,10 @@ public class Usuario {
 
     private String dtNascimento;
 
-    public Usuario() {
+    public User() {
     }
 
-    public Usuario(Long cpf, @NotEmpty(message = "email é obrigatório") String email, @NotEmpty(message = "nome é obrigatório") String nome, String dtNascimento) {
+    public User(Long cpf, @NotEmpty(message = "email é obrigatório") String email, @NotEmpty(message = "nome é obrigatório") String nome, String dtNascimento) {
         this.cpf = cpf;
         this.email = email;
         this.nome = nome;

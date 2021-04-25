@@ -25,9 +25,9 @@ public class Adress {
     private String CEP;
 
     @ManyToOne
-    private Usuario cpfUsuario;
+    private User cpfUser;
 
-    public Adress(Long id, String logradouro, Integer numero, String complemento, String bairro, String cidade, String estado, String CEP, Usuario cpfUsuario) {
+    public Adress(Long id, String logradouro, Integer numero, String complemento, String bairro, String cidade, String estado, String CEP, User cpfUser) {
         this.id = id;
         this.logradouro = logradouro;
         this.numero = numero;
@@ -36,7 +36,7 @@ public class Adress {
         this.cidade = cidade;
         this.estado = estado;
         this.CEP = CEP;
-        this.cpfUsuario = cpfUsuario;
+        this.cpfUser = cpfUser;
     }
 
     public Adress() {
@@ -106,11 +106,11 @@ public class Adress {
         this.CEP = CEP;
     }
 
-    public Usuario getCpfUsuario() {
-        return cpfUsuario;
+    public User getCpfUsuario() {
+        return cpfUser;
     }
 
-    public void setCpfUsuario(Usuario cpfUsuario) {
-        this.cpfUsuario = cpfUsuario;
+    public void setCpfUsuario(User cpfUser) {
+        this.cpfUser = cpfUser;
     }
 }

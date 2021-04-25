@@ -1,30 +1,30 @@
 package orange.talent.model.view;
 
-import orange.talent.model.Usuario;
+import orange.talent.model.User;
 
 import java.util.List;
 
 
 public class ListAdressView {
 
-    private Usuario usuario;
+    private User user;
 
     private List<AdressView> listaDeEnderecos;
 
     public ListAdressView() {
     }
 
-    public ListAdressView(Usuario usuario, List<AdressView> listaDeEnderecos) {
-        this.usuario = usuario;
+    public ListAdressView(User user, List<AdressView> listaDeEnderecos) {
+        this.user = user;
         this.listaDeEnderecos = listaDeEnderecos;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public User getUsuario() {
+        return user;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setUsuario(User user) {
+        this.user = user;
     }
 
     public List<AdressView> getListaDeEnderecos() {
