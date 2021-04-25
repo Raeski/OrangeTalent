@@ -1,13 +1,7 @@
-package orange.talent.model;
+package orange.talent.model.view;
 
-import javax.persistence.*;
+public class AdressView {
 
-@Entity
-@Table(name = "tb_endereco")
-public class Endereco {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String logradouro;
@@ -24,10 +18,10 @@ public class Endereco {
 
     private String CEP;
 
-    @ManyToOne
-    private Usuario cpfUsuario;
+    public AdressView() {
+    }
 
-    public Endereco(Long id, String logradouro, Integer numero, String complemento, String bairro, String cidade, String estado, String CEP, Usuario cpfUsuario) {
+    public AdressView(Long id, String logradouro, Integer numero, String complemento, String bairro, String cidade, String estado, String CEP) {
         this.id = id;
         this.logradouro = logradouro;
         this.numero = numero;
@@ -36,10 +30,6 @@ public class Endereco {
         this.cidade = cidade;
         this.estado = estado;
         this.CEP = CEP;
-        this.cpfUsuario = cpfUsuario;
-    }
-
-    public Endereco() {
     }
 
     public Long getId() {
@@ -104,13 +94,5 @@ public class Endereco {
 
     public void setCEP(String CEP) {
         this.CEP = CEP;
-    }
-
-    public Usuario getCpfUsuario() {
-        return cpfUsuario;
-    }
-
-    public void setCpfUsuario(Usuario cpfUsuario) {
-        this.cpfUsuario = cpfUsuario;
     }
 }

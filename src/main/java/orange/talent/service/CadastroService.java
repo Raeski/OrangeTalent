@@ -10,6 +10,7 @@ import orange.talent.model.view.ListAdressView;
 import orange.talent.repository.EnderecoRepository;
 import orange.talent.repository.UsuarioRepository;
 import orange.talent.viaCep.ViaCEPClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,14 +19,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class CadastroService {
 
-    private final UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    private final EnderecoRepository enderecoRepository;
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
-    private final ViaCEPClient viaCEPClient;
+    @Autowired
+    private ViaCEPClient viaCEPClient;
 
     @Transactional
     public Usuario saveUsuario(Usuario usuario) throws BadRequestException{

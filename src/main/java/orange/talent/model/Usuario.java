@@ -1,21 +1,12 @@
 package orange.talent.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.lang.Nullable;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDate;
-import java.util.List;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Table(name = "tb_usuario")
 public class Usuario {
 
@@ -32,4 +23,45 @@ public class Usuario {
 
     private String dtNascimento;
 
+    public Usuario() {
+    }
+
+    public Usuario(Long cpf, @NotEmpty(message = "email é obrigatório") String email, @NotEmpty(message = "nome é obrigatório") String nome, String dtNascimento) {
+        this.cpf = cpf;
+        this.email = email;
+        this.nome = nome;
+        this.dtNascimento = dtNascimento;
+    }
+
+    public Long getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(Long cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getDtNascimento() {
+        return dtNascimento;
+    }
+
+    public void setDtNascimento(String dtNascimento) {
+        this.dtNascimento = dtNascimento;
+    }
 }

@@ -11,6 +11,4 @@ public interface ViaCEPClient {
     @GetMapping("/{cep}/json")
     ViaCep buscaEndereco(@PathVariable("cep") String cep);
 
-
-
 }
