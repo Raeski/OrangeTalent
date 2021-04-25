@@ -3,6 +3,7 @@ package orange.talent.model.view;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import orange.talent.model.Endereco;
 import orange.talent.model.Usuario;
 
 import java.util.List;
@@ -10,10 +11,10 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseListAdressView {
+public class ListAdressView {
 
     private Usuario usuario;
 
-    private List<ResponseEnderecoView> listaDeEnderecos;
+    private List<AdressView> listaDeEnderecos;
 
 }
