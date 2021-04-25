@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "tb_endereco")
-public class Endereco {
+public class Adress {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,7 +27,7 @@ public class Endereco {
     @ManyToOne
     private Usuario cpfUsuario;
 
-    public Endereco(Long id, String logradouro, Integer numero, String complemento, String bairro, String cidade, String estado, String CEP, Usuario cpfUsuario) {
+    public Adress(Long id, String logradouro, Integer numero, String complemento, String bairro, String cidade, String estado, String CEP, Usuario cpfUsuario) {
         this.id = id;
         this.logradouro = logradouro;
         this.numero = numero;
@@ -39,7 +39,7 @@ public class Endereco {
         this.cpfUsuario = cpfUsuario;
     }
 
-    public Endereco() {
+    public Adress() {
     }
 
     public Long getId() {

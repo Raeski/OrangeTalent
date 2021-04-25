@@ -1,8 +1,7 @@
 package orange.talent.service;
 
-import lombok.RequiredArgsConstructor;
 import orange.talent.exception.BadRequestException;
-import orange.talent.model.Endereco;
+import orange.talent.model.Adress;
 import orange.talent.model.Usuario;
 import orange.talent.model.ViaCep;
 import orange.talent.model.view.AdressView;
@@ -49,10 +48,10 @@ public class CadastroService {
     }
 
     @Transactional
-    public Endereco saveEndereco(Endereco endereco) throws BadRequestException{
+    public Adress saveEndereco(Adress adress) throws BadRequestException{
         try{
-            validateCep(endereco);
-            return enderecoRepository.save(endereco);
+            validateCep(adress);
+            return enderecoRepository.save(adress);
         } catch (BadRequestException badRequestException) {
             throw new BadRequestException("CEP inválido");
         }
@@ -63,7 +62,7 @@ public class CadastroService {
         try {
             Usuario usuario = new Usuario();
             usuario.setCpf(cpfUsuario);
-            List<Endereco> bycpfUsuario = enderecoRepository.findBycpfUsuario(usuario);
+            List<Adress> bycpfUsuario = enderecoRepository.findBycpfUsuario(usuario);
             ListAdressView listAdressView = convertToView(bycpfUsuario);
             if(bycpfUsuario.isEmpty()) {
                 throw new BadRequestException("Falha ao listar endereços, verifique se o CPF está correto.");
@@ -76,37 +75,37 @@ public class CadastroService {
 
     }
 
-    public ViaCep validateCep(Endereco endereco) {
+    public ViaCep validateCep(Adress adress) {
         try {
-            return this.viaCEPClient.buscaEndereco(endereco.getCEP());
+            return this.viaCEPClient.buscaEndereco(adress.getCEP());
         } catch (BadRequestException badRequestException) {
             throw new BadRequestException("CEP inválido");
         }
     }
 
-    public List<AdressView> convertToViewEndereco(List<Endereco> enderecoList) {
+    public List<AdressView> convertToViewEndereco(List<Adress> adressList) {
         List<AdressView> viewList = new ArrayList<>();
-        for(Endereco endereco: enderecoList) {
+        for(Adress adress : adressList) {
             AdressView enderecoView = new AdressView();
-            enderecoView.setId(endereco.getId());
-            enderecoView.setBairro(endereco.getBairro());
-            enderecoView.setCEP(endereco.getCEP());
-            enderecoView.setCidade(endereco.getCidade());
-            enderecoView.setEstado(endereco.getEstado());
-            enderecoView.setNumero(endereco.getNumero());
-            enderecoView.setComplemento(endereco.getComplemento());
-            enderecoView.setLogradouro(endereco.getLogradouro());
+            enderecoView.setId(adress.getId());
+            enderecoView.setBairro(adress.getBairro());
+            enderecoView.setCEP(adress.getCEP());
+            enderecoView.setCidade(adress.getCidade());
+            enderecoView.setEstado(adress.getEstado());
+            enderecoView.setNumero(adress.getNumero());
+            enderecoView.setComplemento(adress.getComplemento());
+            enderecoView.setLogradouro(adress.getLogradouro());
             viewList.add(enderecoView);
         }
         return viewList;
     }
 
 
-    public ListAdressView convertToView(List<Endereco> enderecos) {
+    public ListAdressView convertToView(List<Adress> adresses) {
         ListAdressView listAdressView = new ListAdressView();
-        List<AdressView> enderecoView = convertToViewEndereco(enderecos);
+        List<AdressView> enderecoView = convertToViewEndereco(adresses);
         listAdressView.setListaDeEnderecos(enderecoView);
-        listAdressView.setUsuario(enderecos.get(0).getCpfUsuario());
+        listAdressView.setUsuario(adresses.get(0).getCpfUsuario());
         return listAdressView;
     }
 

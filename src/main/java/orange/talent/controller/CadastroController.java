@@ -1,6 +1,6 @@
 package orange.talent.controller;
 
-import orange.talent.model.Endereco;
+import orange.talent.model.Adress;
 import orange.talent.model.Usuario;
 import orange.talent.model.view.ListAdressView;
 import orange.talent.service.CadastroService;
@@ -24,8 +24,8 @@ public class CadastroController {
     }
 
     @PostMapping("/endereco")
-    public ResponseEntity<Endereco> saveEndereco(@RequestBody Endereco endereco) {
-        return new ResponseEntity(cadastroService.saveEndereco(endereco), HttpStatus.CREATED);
+    public ResponseEntity<Adress> saveEndereco(@RequestBody Adress adress) {
+        return new ResponseEntity(cadastroService.saveEndereco(adress), HttpStatus.CREATED);
     }
 
     @GetMapping(path= "/{cpfUsuario}")
