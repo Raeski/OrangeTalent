@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface AdressRepository extends JpaRepository<Adress, Long> {
 
-    List<Adress> findBycpfUsuario(User cpfUser) throws BadRequestException;
+    List<Adress> findBycpfUsuario(User cpfUsuario) throws BadRequestException;
 }

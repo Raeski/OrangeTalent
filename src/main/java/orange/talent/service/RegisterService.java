@@ -47,11 +47,21 @@ public class RegisterService {
         }
     }
 
+
+
     @Transactional
     public Adress saveEndereco(Adress adress) throws BadRequestException{
         try{
             validateCep(adress);
             return adressRepository.save(adress);
+        } catch (BadRequestException badRequestException) {
+            throw new BadRequestException("CEP inválido");
+        }
+    }
+
+    public ViaCep validateCep(Adress adress) {
+        try {
+            return this.viaCEPClient.buscaEndereco(adress.getCEP());
         } catch (BadRequestException badRequestException) {
             throw new BadRequestException("CEP inválido");
         }
@@ -68,17 +78,10 @@ public class RegisterService {
             }
             return listAdressView;
         } catch (BadRequestException badRequestException) {
-            throw new BadRequestException(badRequestException, "Falha ao listar endereços, verifique se o CPF está correto.");
+            throw new BadRequestException(badRequestException, badRequestException.getMessage());
         }
     }
 
-    public ViaCep validateCep(Adress adress) {
-        try {
-            return this.viaCEPClient.buscaEndereco(adress.getCEP());
-        } catch (BadRequestException badRequestException) {
-            throw new BadRequestException("CEP inválido");
-        }
-    }
 
     public List<AdressView> convertToViewEndereco(List<Adress> adressList) {
         List<AdressView> viewList = new ArrayList<>();
@@ -99,11 +102,19 @@ public class RegisterService {
 
 
     public ListAdressView convertToView(List<Adress> adresses) {
-        ListAdressView listAdressView = new ListAdressView();
-        List<AdressView> adressView = convertToViewEndereco(adresses);
-        listAdressView.setListaDeEnderecos(adressView);
-        listAdressView.setUsuario(adresses.get(0).getCpfUsuario());
-        return listAdressView;
+        try {
+            ListAdressView listAdressView = new ListAdressView();
+            List<AdressView> adressView = convertToViewEndereco(adresses);
+            listAdressView.setListaDeEnderecos(adressView);
+            if(adresses.size() <= 0) {
+                throw new BadRequestException("Falha ao listar endereços, esse CPF não possue endereço cadastrado");
+            }
+            listAdressView.setUsuario(adresses.get(0).getCpfUsuario());
+            return listAdressView;
+        } catch (BadRequestException badRequestException) {
+            throw new BadRequestException(badRequestException, badRequestException.getMessage());
+        }
+
     }
 
 }
